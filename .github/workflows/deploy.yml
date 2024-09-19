@@ -1,0 +1,37 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main  # Trigger deployment when the main branch is updated
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@v2
+
+    - name: Install SSH client
+      run: sudo apt-get install -y ssh
+
+    - name: Add SSH Key
+      run: |
+        mkdir -p ~/.ssh/
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+
+    - name: Add EC2 Host to Known Hosts
+      run: ssh-keyscan -H 35.178.201.94 >> ~/.ssh/known_hosts
+
+    - name: Deploy the app to EC2
+      run: |
+        ssh -i ~/.ssh/id_rsa ubuntu@35.178.201.94 << 'EOF'
+          cd /home/ec2-user/dev/uni-swe-agile-backend
+          git pull origin main
+          source .venv/bin/activate
+          pip3 install -r requirements.txt
+
+          sudo systemctl restart fastapi-app
+        EOF
