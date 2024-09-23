@@ -1,0 +1,11 @@
+id,name,summary,price_estimate_min,price_estimate_max,address_id,creation_user_id
+1,The Fitzwilliam Museum,Art Museum in Cambridge,0,0,1,1
+2,King's College Chapel,Historic Chapel in Cambridge,5,10,2,2
+3,The British Museum,Major museum in London,0,0,3,3
+4,Leicester Square,Entertainment hub in London,20,100,4,4
+5,Bristol Cathedral,Cathedral in Bristol,0,10,5,5
+6,Clifton Suspension,Iconic bridge in Bristol,5,15,6,1
+7,Cambridge Station,Main train station in Cambridge,0,0,7,2
+8,Buckingham Palace,Royal residence in London,25,50,8,3
+9,Cambridge Market,Open-air market in Cambridge,5,15,9,4
+10,Hyde Park,Large park in London,0,0,10,5

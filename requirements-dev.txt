@@ -1,0 +1,4 @@
+# Needed for dev scripts
+pandas
+black
+isort

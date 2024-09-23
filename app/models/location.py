@@ -1,0 +1,21 @@
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, func
+from sqlalchemy.orm import relationship
+
+from ..utils.database import Base
+from .mixins import TimestampMixin
+
+
+class Location(TimestampMixin, Base):
+    __tablename__ = "locations"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    summary = Column(String, nullable=True)
+    price_estimate_min = Column(Integer, nullable=False)
+    price_estimate_max = Column(Integer, nullable=False)
+    address_id = Column(Integer, ForeignKey("addresses.id"))
+    creation_user_id = Column(Integer, ForeignKey("users.id"))
+
+    address = relationship("Address", back_populates="locations")
+    creator = relationship("User", back_populates="locations")
+    distances = relationship("Distance", back_populates="destination")

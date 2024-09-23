@@ -1,0 +1,11 @@
+id,name,address_id,creation_user_id
+1,Home 1 - Cambridge,1,1
+2,Home 2 - Cambridge,2,2
+3,Home 1 - London,3,3
+4,Home 2 - London,4,4
+5,Home 1 - Bristol,5,5
+6,Home 2 - Bristol,6,1
+7,Home 3 - Cambridge,7,2
+8,Home 3 - London,8,3
+9,Home 4 - Cambridge,9,4
+10,Home 4 - London,10,5

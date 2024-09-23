@@ -1,0 +1,11 @@
+id,street,city,postal_code,country,latitude,longitude
+1,King's Parade,Cambridge,CB2 1SJ,England,52.2053,0.1218
+2,Trumpington Street,Cambridge,CB2 1QA,England,52.2018,0.1173
+3,Oxford Street,London,W1D 1BS,England,51.5145,-0.1425
+4,Shaftesbury Avenue,London,W1D 6BA,England,51.5122,-0.1282
+5,Park Street,Bristol,BS1 5LQ,England,51.4550,-2.5967
+6,Royal York Crescent,Bristol,BS8 4JZ,England,51.4545,-2.6142
+7,Station Road,Cambridge,CB1 2JW,England,52.1944,0.1378
+8,Whitehall,London,SW1A 2BX,England,51.5007,-0.1246
+9,Green Street,Cambridge,CB2 3JU,England,52.2068,0.1205
+10,Park Lane,London,W1K 1QA,England,51.5072,-0.1569

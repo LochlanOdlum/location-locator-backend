@@ -1,0 +1,11 @@
+id,source_home_id,destination_location_id,walking_distance_minutes
+1,1,1,10
+2,2,2,15
+3,3,3,20
+4,4,4,30
+5,5,5,12
+6,6,6,18
+7,7,7,5
+8,8,8,25
+9,9,9,12
+10,10,10,35
