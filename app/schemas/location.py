@@ -8,9 +8,11 @@ from .user import UserRead
 
 class LocationBase(BaseModel):
     name: str
-    summary: str | None = None
+    summary: str
+    description: str 
     price_estimate_min: int
     price_estimate_max: int
+
 
 class LocationCreate(LocationBase):
     address: AddressCreate

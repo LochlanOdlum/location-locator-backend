@@ -15,4 +15,4 @@ class Home(TimestampMixin, Base):
 
     address = relationship("Address", back_populates="homes")
     creator = relationship("User", back_populates="homes")
-    distances = relationship("Distance", back_populates="source")
+    distances = relationship("Distance", back_populates="source", cascade="all, delete-orphan")

@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -11,7 +12,8 @@ class AddressBase(BaseModel):
 
 
 class AddressCreate(AddressBase):
-    pass
+    latitude: Optional[float]
+    longitude: Optional[float]
 
 
 class AddressRead(AddressBase):

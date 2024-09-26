@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from pydantic import BaseModel, EmailStr
+from ..models.roles import Role
 
 
 class UserSignIn(BaseModel):
@@ -14,11 +15,17 @@ class UserCreate(BaseModel):
     password: str
 
 
+class UserUpdate(BaseModel):
+    name: str
+    email: EmailStr
+    role: Role
+
+
 class UserRead(BaseModel):
     id: int
     name: str
     email: EmailStr
-    role: str
+    role: Role
     created_at: datetime
     updated_at: datetime
 

@@ -44,17 +44,18 @@ def update_location(
     location_id: int,
     location: schemas.LocationCreate,
     db: Session = Depends(get_db),
+    ors_client: OpenRouteServiceClient = Depends(get_ors_client),
     current_user: schemas.UserRead = Depends(get_current_user),
 ):
     db_location = crud.locations.get_location(db, location_id=location_id)
     if not db_location:
         raise HTTPException(status_code=404, detail="Location not found")
-    if db_location.creation_user_id != current_user.id:
-        raise HTTPException(
-            status_code=403, detail="Not authorized to update this location"
-        )
+    # if db_location.creation_user_id != current_user.id:
+    #     raise HTTPException(
+    #         status_code=403, detail="Not authorized to update this location"
+    #     )
     return crud.locations.update_location(
-        db=db, location=location, location_id=location_id
+        db=db, location=location, location_id=location_id, address_id = db_location.address.id, ors_client = ors_client,
     )
 
 
@@ -71,9 +72,9 @@ def delete_location(
     db_location = crud.locations.get_location(db, location_id=location_id)
     if not db_location:
         raise HTTPException(status_code=404, detail="Location not found")
-    if db_location.creation_user_id != current_user.id:
-        raise HTTPException(
-            status_code=403, detail="Not authorized to delete this location"
-        )
+    # if db_location.creation_user_id != current_user.id:
+    #     raise HTTPException(
+    #         status_code=403, detail="Not authorized to delete this location"
+    #     )
     crud.locations.delete_location(db=db, location_id=location_id)
     return

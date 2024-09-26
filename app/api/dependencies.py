@@ -14,7 +14,7 @@ from ..utils.database import SessionLocal
 
 SECRET_KEY = os.getenv("AUTH_HASH_SECRET_KEY")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+ACCESS_TOKEN_EXPIRE_MINUTES = 240
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/signin")
 
@@ -57,8 +57,12 @@ def get_current_user(
 
 
 def require_role(required_role: Role):
+    role_to_index = {role: index for index, role in enumerate(Role)}
+    required_role_index = role_to_index[required_role]
+
     def role_dependency(current_user: User = Depends(get_current_user)):
-        if current_user.role != required_role:
+        current_role_index = role_to_index[current_user.role]
+        if current_role_index < required_role_index:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Operation not permitted for your role.",

@@ -1,9 +1,11 @@
-from sqlalchemy import Column, Integer, String
+from enum import Enum
+
+from sqlalchemy import Column, Integer, String, Enum as SQLAlchemyEnum
 from sqlalchemy.orm import relationship
 
 from ..utils.database import Base
 from .mixins import TimestampMixin
-
+from .roles import Role
 
 class User(TimestampMixin, Base):
     __tablename__ = "users"
@@ -12,8 +14,9 @@ class User(TimestampMixin, Base):
     name = Column(String, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
-    role = Column(String, nullable=False)
+    role = Column(SQLAlchemyEnum(Role), nullable=False, default=Role.USER)
 
-    locations = relationship("Location", back_populates="creator")
-    homes = relationship("Home", back_populates="creator")
+    # SQLAlchemy will row when parents are deleted
+    locations = relationship("Location", back_populates="creator", cascade="all, delete-orphan")
+    homes = relationship("Home", back_populates="creator", cascade="all, delete-orphan")
 

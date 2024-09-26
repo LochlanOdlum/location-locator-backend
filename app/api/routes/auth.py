@@ -19,10 +19,10 @@ def signup(user: schemas.UserCreate, db: Session = Depends(get_db)):
     return crud.user.create_user(db=db, user=user)
 
 
-@router.post("/signin", response_model=schemas.Token)
+@router.post("/signin", response_model=schemas.SignInResponse)
 def signin(form_data: schemas.UserSignIn, db: Session = Depends(get_db)):
     user = crud.user.get_user_by_email(db, email=form_data.email)
     if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(status_code=400, detail="Incorrect email or password")
     access_token = create_access_token(data={"sub": str(user.id)})
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "bearer", "user": user}

@@ -1,6 +1,6 @@
 id,name,email,hashed_password,role
-1,Alice Smith,alice.smith@example.com,hashed_password_1,user
-2,Bob Jones,bob.jones@example.com,hashed_password_2,admin
-3,Charlie Lee,charlie.lee@example.com,hashed_password_3,user
-4,David Brown,david.brown@example.com,hashed_password_4,admin
-5,Eve White,eve.white@example.com,hashed_password_5,user
+1,Alice Smith,alice.smith@example.com,hashed_password_1,USER
+2,Bob Jones,bob.jones@example.com,hashed_password_2,ADMIN
+3,Charlie Lee,charlie.lee@example.com,hashed_password_3,USER
+4,David Brown,david.brown@example.com,hashed_password_4,ADMIN
+5,Eve White,eve.white@example.com,hashed_password_5,USER

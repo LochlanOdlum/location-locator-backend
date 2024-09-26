@@ -51,7 +51,7 @@ class OpenRouteServiceClient:
 
         # Extract duration from the first result (features[0].properties.summary.duration)
         features = data.get("features")
-        if not features or not features[0]:
+        if not features or not features[0] or not "duration" in features[0]["properties"]["summary"]:
             raise ValueError("No route data found for the given coordinates.")
 
         duration = features[0]["properties"]["summary"]["duration"]

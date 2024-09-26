@@ -10,6 +10,9 @@ DATABASE_USERNAME = os.getenv("DATABASE_USERNAME")
 DATABASE_PASSWORD = os.getenv("DATABASE_PASSWORD")
 DATABASE_ENDPOINT = os.getenv("DATABASE_ENDPOINT")
 
+# Order of tables in which they can be created (FK's must be created first)
+table_dependency_order = ["users", "addresses", "homes", "locations", "distances"]
+
 def insert_csv_into_table(csv_path, table_name, conn):
     df = pd.read_csv(csv_path)
 
@@ -26,6 +29,9 @@ def insert_csv_into_table(csv_path, table_name, conn):
 
     conn.commit()
     print(f"Inserted data into {table_name}")
+
+    cursor.execute(f"SELECT setval('{table_name}_id_seq', (SELECT MAX(id) FROM {table_name}));")
+    print("Updated incremental counter")
 
 def main():
     # Connect to the PostgreSQL database
@@ -55,3 +61,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
