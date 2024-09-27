@@ -1,11 +1,11 @@
 id,name,summary,description,price_estimate_min,price_estimate_max,address_id,creation_user_id
-1,The Fitzwilliam Museum,Art Museum in Cambridge,abc,0,0,1,1
-2,King's College Chapel,Historic Chapel in Cambridge,abc,5,10,2,2
-3,The British Museum,Major museum in London,abc,0,0,3,3
-4,Leicester Square,Entertainment hub in London,abc,20,100,4,4
-5,Bristol Cathedral,Cathedral in Bristol,abc,0,10,5,5
-6,Clifton Suspension,Iconic bridge in Bristol,abc,5,15,6,1
-7,Cambridge Station,Main train station in Cambridge,abc,0,0,7,2
-8,Buckingham Palace,Royal residence in London,abc,25,50,8,3
-9,Cambridge Market,Open-air market in Cambridge,abc,5,15,9,4
-10,Hyde Park,Large park in London,abc,0,0,10,5
+1,The Fitzwilliam Museum,Art Museum in Cambridge,"The Fitzwilliam Museum is one of the finest art museums in the UK, showcasing a world-renowned collection of art and antiquities, ranging from ancient Egypt to modern European paintings. Entry is free, though donations are encouraged.",0,0,1,1
+2,King's College Chapel,Historic Chapel in Cambridge,"King's College Chapel is a masterpiece of English Gothic architecture, famous for its stunning fan-vaulted ceiling, stained glass windows, and choir. It serves as a major tourist attraction and religious site. Guided tours and concert events may have entry fees.",5,10,2,2
+3,The British Museum,Major museum in London,"The British Museum houses a vast collection of world art and artifacts, including the Rosetta Stone, Egyptian mummies, and the Elgin Marbles. Admission is free, although special exhibitions may have a charge.",0,0,3,3
+4,Leicester Square,Entertainment hub in London,"Leicester Square is the heart of London’s West End, bustling with cinemas, theatres, restaurants, and street performers. It is famous for hosting film premieres and offers a lively atmosphere both day and night. Prices for entertainment and dining vary.",20,100,4,4
+5,Bristol Cathedral,Cathedral in Bristol,"Bristol Cathedral is a historical site with a blend of Gothic and Romanesque architecture. It’s known for its beautiful stained glass windows, ornate carvings, and tranquil gardens. Admission is generally free, though donations are accepted.",0,10,5,5
+6,Clifton Suspension Bridge,Iconic bridge in Bristol,"The Clifton Suspension Bridge, spanning the Avon Gorge, is an engineering marvel and one of Bristol’s most iconic landmarks. Visitors can walk across the bridge, and there’s an informative visitor center nearby. The bridge is free to cross, though guided tours may have fees.",5,15,6,1
+7,Cambridge Station,Main train station in Cambridge,"Cambridge Station is the primary rail hub for the city, connecting to major UK destinations like London, Norwich, and Birmingham. It’s a gateway for tourists visiting Cambridge’s famous universities and museums. There is no cost to enter the station, but train tickets vary in price.",0,0,7,2
+8,Buckingham Palace,Royal residence in London,"Buckingham Palace is the official residence of the British monarch and one of the most visited attractions in London. During the summer months, parts of the palace are open to the public for guided tours. Prices vary based on the time of year and type of visit.",25,50,8,3
+9,Cambridge Market,Open-air market in Cambridge,"Cambridge Market is a vibrant, open-air market located in the heart of the city. It features a variety of stalls selling fresh produce, handmade crafts, food, and vintage items. The market operates daily, and prices for goods can range from affordable snacks to artisan products.",5,15,9,4
+10,Hyde Park,Large park in London,"Hyde Park is one of London's largest and most famous parks, offering vast green spaces, walking paths, and landmarks like the Serpentine Lake and Speaker’s Corner. It's a popular spot for picnics, boating, and cultural events. Entry is free, but some activities like boat rentals may incur fees.",0,0,10,5

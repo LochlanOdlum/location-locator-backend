@@ -2,3 +2,5 @@
 pandas
 black
 isort
+pytest
+httpx

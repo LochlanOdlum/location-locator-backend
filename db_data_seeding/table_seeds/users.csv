@@ -1,6 +1,11 @@
 id,name,email,hashed_password,role
-1,Alice Smith,alice.smith@example.com,hashed_password_1,USER
+1,Root,root@test.com,"$2b$12$rMHVypxRs1k99Psl5MvXG.GR/dL07Ug0bwGixNE1ZwOWuOy1p/OF.",ROOT
 2,Bob Jones,bob.jones@example.com,hashed_password_2,ADMIN
 3,Charlie Lee,charlie.lee@example.com,hashed_password_3,USER
 4,David Brown,david.brown@example.com,hashed_password_4,ADMIN
 5,Eve White,eve.white@example.com,hashed_password_5,USER
+6,Alice Smith,alice.smith@example.com,hashed_password_6,USER
+7,Frank Harris,frank.harris@example.com,hashed_password_7,ADMIN
+8,Grace Taylor,grace.taylor@example.com,hashed_password_8,USER
+9,Hank Miller,hank.miller@example.com,hashed_password_9,ADMIN
+10,Ivy Wilson,ivy.wilson@example.com,hashed_password_10,USER

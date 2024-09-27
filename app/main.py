@@ -20,14 +20,12 @@ app.add_middleware(
     allow_methods=["*"],  
     allow_headers=["*"],
 )
-
 # Include Routers
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(locations.router)
 app.include_router(homes.router)
 app.include_router(geocode.router)
-
 
 @app.get("/")
 def read_root():
