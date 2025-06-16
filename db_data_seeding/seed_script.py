@@ -6,9 +6,8 @@ import os
 import psycopg2
 import pandas as pd
 
-DATABASE_USERNAME = os.getenv("DATABASE_USERNAME")
-DATABASE_PASSWORD = os.getenv("DATABASE_PASSWORD")
-DATABASE_ENDPOINT = os.getenv("DATABASE_ENDPOINT")
+DATABASE_URL = os.environ["DATABASE_URL"]
+
 
 # Order of tables in which they can be created (FK's must be created first)
 table_dependency_order = ["users", "addresses", "homes", "locations", "distances"]
@@ -35,13 +34,7 @@ def insert_csv_into_table(csv_path, table_name, conn):
 
 def main():
     # Connect to the PostgreSQL database
-    conn = psycopg2.connect(
-        dbname="locationlocator",
-        user=DATABASE_USERNAME,
-        password=DATABASE_PASSWORD,
-        host=DATABASE_ENDPOINT,
-        port=5432
-    )
+    conn = psycopg2.connect(DATABASE_URL)
 
     try:
         # Directory containing the CSV files

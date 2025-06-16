@@ -1,6 +1,7 @@
 # Needed for production runtime
 fastapi
-uvicorn
+uvicorn[standard]
+gunicorn
 SQLAlchemy
 psycopg2-binary
 pydantic

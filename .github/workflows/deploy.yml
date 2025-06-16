@@ -1,37 +1,60 @@
-name: Deploy to EC2
+name: Build and Deploy to Raspberry Pi
 
 on:
   push:
-    branches:
-      - main  # Trigger deployment when the main branch is updated
+    branches: [main]
+
+env:
+  IMAGE_NAME: ghcr.io/${{ github.repository }}
 
 jobs:
-  deploy:
+  build-and-push:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
-    - name: Checkout the code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Install SSH client
-      run: sudo apt-get install -y ssh
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
 
-    - name: Add SSH Key
-      run: |
-        mkdir -p ~/.ssh/
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
+      - name: Build Docker image
+        run: docker build -t $IMAGE_NAME:latest .
 
-    - name: Add EC2 Host to Known Hosts
-      run: ssh-keyscan -H 35.178.201.94 >> ~/.ssh/known_hosts
+      - name: Push image to GHCR
+        run: docker push $IMAGE_NAME:latest
 
-    - name: Deploy the app to EC2
-      run: |
-        ssh -i ~/.ssh/id_rsa ec2-user@35.178.201.94 << 'EOF'
-          cd /home/ec2-user/dev/uni-swe-agile-backend
-          git pull origin main
-          source .venv/bin/activate
-          pip3 install -r requirements.txt
+  # deploy:
+  #   needs: build-and-push
+  #   runs-on: ubuntu-latest
 
-          sudo systemctl restart fastapi-app
-        EOF
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+
+  #     - name: Set up SSH
+  #       run: |
+  #         mkdir -p ~/.ssh
+  #         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+  #         chmod 600 ~/.ssh/id_rsa
+  #         ssh-keyscan -p ${{ secrets.SSH_PORT }}  ${{ secrets.SSH_ADDRESS }} >> ~/.ssh/known_hosts
+
+  #     - name: Deploy to Raspberry Pi
+  #       run: |
+  #         ssh -p ${{ secrets.SSH_PORT }} "${{ secrets.RASPBERRY_PI_USER }}@${{ secrets.SSH_ADDRESS }}" << 'EOF'
+  #           cd /home/${{ secrets.RASPBERRY_PI_USER }}/deployuser/app/${{ github.repository }}
+  #           git pull origin main
+
+  #           cat > .env <<EOL
+  #           POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+  #           POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+  #           AUTH_HASH_SECRET_KEY=${{ secrets.AUTH_HASH_SECRET_KEY }}
+  #           OPENROUTESERVICE_API_KEY=${{ secrets.OPENROUTESERVICE_API_KEY }}
+  #           EOL
+
+  #           docker compose -f docker-compose.yml -f docker-compose.prod.yml pull
+  #           docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+  #         EOF

@@ -1,0 +1,5 @@
+version: '3.8'
+
+services:
+  api:
+    image: ghcr.io/lochlan/<uni-swe-agile-backend:latest
