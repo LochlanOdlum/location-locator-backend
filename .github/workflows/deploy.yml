@@ -18,43 +18,49 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set lowercase image name
+        id: image
+        run: echo "name=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
 
       - name: Build Docker image
-        run: docker build -t $IMAGE_NAME:latest .
+        run: docker build -t ${{ steps.image.outputs.name }}:latest .
 
       - name: Push image to GHCR
-        run: docker push $IMAGE_NAME:latest
+        run: docker push ${{ steps.image.outputs.name }}:latest
 
-  # deploy:
-  #   needs: build-and-push
-  #   runs-on: ubuntu-latest
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  #     - name: Set up SSH
-  #       run: |
-  #         mkdir -p ~/.ssh
-  #         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-  #         chmod 600 ~/.ssh/id_rsa
-  #         ssh-keyscan -p ${{ secrets.SSH_PORT }}  ${{ secrets.SSH_ADDRESS }} >> ~/.ssh/known_hosts
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p ${{ secrets.SSH_PORT }}  ${{ secrets.SSH_ADDRESS }} >> ~/.ssh/known_hosts
 
-  #     - name: Deploy to Raspberry Pi
-  #       run: |
-  #         ssh -p ${{ secrets.SSH_PORT }} "${{ secrets.RASPBERRY_PI_USER }}@${{ secrets.SSH_ADDRESS }}" << 'EOF'
-  #           cd /home/${{ secrets.RASPBERRY_PI_USER }}/deployuser/app/${{ github.repository }}
-  #           git pull origin main
+      - name: Deploy to Raspberry Pi
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_ADDRESS }} >> ~/.ssh/known_hosts
 
-  #           cat > .env <<EOL
-  #           POSTGRES_USER=${{ secrets.POSTGRES_USER }}
-  #           POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-  #           AUTH_HASH_SECRET_KEY=${{ secrets.AUTH_HASH_SECRET_KEY }}
-  #           OPENROUTESERVICE_API_KEY=${{ secrets.OPENROUTESERVICE_API_KEY }}
-  #           EOL
+          ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} "${{ secrets.RASPBERRY_PI_USER }}@${{ secrets.SSH_ADDRESS }}" bash << EOF
+            set -e
+            cd /home/${{ secrets.RASPBERRY_PI_USER }}/app/uni-swe-agile-backend
+            git pull origin main
 
-  #           docker compose -f docker-compose.yml -f docker-compose.prod.yml pull
-  #           docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-  #         EOF
+            echo "Creating .env file"
+            echo -e "POSTGRES_USER=${{ secrets.POSTGRES_USER }}\nPOSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}\nAUTH_HASH_SECRET_KEY=${{ secrets.AUTH_HASH_SECRET_KEY }}\nOPENROUTESERVICE_API_KEY=${{ secrets.OPENROUTESERVICE_API_KEY }}" > .env
+
+            echo "Running docker compose"s
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+          EOF
