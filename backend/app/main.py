@@ -29,4 +29,5 @@ app.include_router(geocode.router)
 
 @app.get("/")
 def read_root():
+    print("Request received")
     return {"message": "Welcome to Lochlan's Location Locator API"}

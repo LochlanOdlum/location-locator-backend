@@ -1,78 +1,32 @@
-name: Build and Deploy to Raspberry Pi
+name: Build and Deploy to AWS
 
 on:
   push:
     branches: [main]
-
-env:
-  IMAGE_NAME: ghcr.io/${{ github.repository }}
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set lowercase image name
-        id: image
-        run: echo "name=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
         with:
-          install: true
-          driver-opts: image=moby/buildkit:latest
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
 
-      - name: Log in to GitHub Container Registry
-        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
-
-      - name: Build and push multi-arch image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ghcr.io/lochlanodlum/uni-swe-agile-backend:latest
-          platforms: linux/arm/v8
-          provenance: false
-
-  deploy:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up SSH
+      - name: Install CDK dependencies
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -p ${{ secrets.SSH_PORT }}  ${{ secrets.SSH_ADDRESS }} >> ~/.ssh/known_hosts
+          cd cdk
+          npm ci
 
-      - name: Deploy to Raspberry Pi
+      - name: Deploy CDK stack (builds image and uploads to ECR)
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_ADDRESS }} >> ~/.ssh/known_hosts
-
-          ssh -i ~/.ssh/id_rsa -p ${{ secrets.SSH_PORT }} "${{ secrets.RASPBERRY_PI_USER }}@${{ secrets.SSH_ADDRESS }}" bash << EOF
-            set -e
-            cd /home/${{ secrets.RASPBERRY_PI_USER }}/app/uni-swe-agile-backend
-            git pull origin main --force
-
-            echo "Creating .env file"
-            echo -e "POSTGRES_USER=${{ secrets.POSTGRES_USER }}\nPOSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}\nAUTH_HASH_SECRET_KEY=${{ secrets.AUTH_HASH_SECRET_KEY }}\nOPENROUTESERVICE_API_KEY=${{ secrets.OPENROUTESERVICE_API_KEY }}" > .env
-
-            echo "Running docker compose"s
-            docker compose -f docker-compose.yml -f docker-compose.prod.yml pull
-            docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-          EOF
+          cd cdk
+          npx cdk deploy --require-approval never

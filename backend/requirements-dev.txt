@@ -4,3 +4,4 @@ black
 isort
 pytest
 httpx
+psycopg2-binary

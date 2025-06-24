@@ -11,7 +11,7 @@ class OpenRouteServiceClient:
 
     def _request(self, endpoint: str, params: dict):
         url = f"{self.BASE_URL}{endpoint}"
-        headers = {"Authorization": f"Bearer {self.api_key}"}
+        headers = {"Authorization": f"{self.api_key}"}
         response = requests.get(url, params=params, headers=headers)
         response.raise_for_status()  # Raise an exception for bad status codes
         return response.json()
@@ -19,7 +19,7 @@ class OpenRouteServiceClient:
     def get_coordinates(self, location_name: str):
         """Fetch GPS coordinates (longitude, latitude) for a given location string."""
         endpoint = "/geocode/search"
-        params = {"api_key": self.api_key, "text": location_name, "size": 1}
+        params = {"text": location_name, "size": 1}
         data = self._request(endpoint, params)
 
         # Extract coordinates from the first result (features[0].geometry.coordinates)
@@ -43,7 +43,6 @@ class OpenRouteServiceClient:
         endpoint = f"/v2/directions/{profile}"
 
         params = {
-            "api_key": self.api_key,
             "start": f"{start_long},{start_lat}",
             "end": f"{end_long},{end_lat}",
         }

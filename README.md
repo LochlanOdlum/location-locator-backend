@@ -40,7 +40,6 @@ A simple FastAPI application with PostgreSQL and OpenRouteService integration.
 
 4. **Start PostgreSQL Database**
 
-
 5. **Configure Environment Variables**
 
    Create a `.env` file in the project root and add the following:

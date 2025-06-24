@@ -1,15 +1,15 @@
 # Needed for production runtime
 fastapi
-uvicorn[standard]
 gunicorn
+uvicorn
 SQLAlchemy
-psycopg2-binary
 pydantic
-python-jose[cryptography]
+python-jose
+psycopg2-binary
 passlib[bcrypt]
 alembic
 pydantic[email]
 python-dotenv
 requests
-
-
+pandas
+bcrypt==4.0.1
