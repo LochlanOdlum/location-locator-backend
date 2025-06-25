@@ -1,8 +1,8 @@
-import os, sys
+import os
+import sys
+
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 
 # 1) Tell Python that "app" lives right here in `backend/`
 here = os.path.abspath(os.path.dirname(__file__))
@@ -11,19 +11,21 @@ sys.path.insert(0, here)
 # **1. Force an in-memory SQLite before importing your app**
 os.environ["DATABASE_URL"] = "sqlite:///:memory:"
 
-from app.main import app
-from app.utils.database import Base, engine as app_engine, SessionLocal
-from app.api.dependencies import get_db, get_current_user, get_ors_client
-from app.models.user import User
-from app.models.roles import Role
 from unittest.mock import MagicMock
-from app.utils.hashing import hash_password
 
+from app.api.dependencies import get_current_user, get_db, get_ors_client
+from app.main import app
+from app.models.roles import Role
+from app.models.user import User
+from app.utils.database import Base, SessionLocal
+from app.utils.database import engine as app_engine
+from app.utils.hashing import hash_password
 
 # **2. Create a session-scoped engine** (re-using yours, if you prefer)
 # If you want to isolate tests even more, you can literally re-create the engine:
 # engine = create_engine(os.getenv("DATABASE_URL"), connect_args={"check_same_thread": False})
 # SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+
 
 @pytest.fixture(scope="session", autouse=True)
 def create_test_database():
@@ -31,6 +33,7 @@ def create_test_database():
     Base.metadata.create_all(bind=app_engine)
     yield
     Base.metadata.drop_all(bind=app_engine)
+
 
 @pytest.fixture
 def db_session():
@@ -53,6 +56,7 @@ def db_session():
     transaction.rollback()
     connection.close()
 
+
 @pytest.fixture
 def test_client(db_session):
     """
@@ -62,6 +66,7 @@ def test_client(db_session):
       - `get_ors_client` is a MagicMock
     Then spin up TestClient(app).
     """
+
     def override_get_db():
         try:
             yield db_session
@@ -98,7 +103,7 @@ def add_test_user(db_session):
         email="testuser@example.com",
         hashed_password=hash_password("not_a_real_password"),
         role=Role.USER,
-        name="testName"
+        name="testName",
     )
     db_session.add(test_user)
     db_session.commit()

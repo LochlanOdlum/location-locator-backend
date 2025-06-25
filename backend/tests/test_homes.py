@@ -1,17 +1,4 @@
-# tests/test_homes.py
-
 import pytest
-from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from unittest.mock import MagicMock
-
-from app.main import app  # Adjust the import according to your project structure
-from app.models import home, address, user, location, distance
-from app.utils.database import Base, engine, SessionLocal  # ← reuse exactly this
-from app.api.dependencies import get_current_user, get_ors_client, get_db
-from app.models.user import User
-from app.models.roles import Role
 
 
 @pytest.fixture

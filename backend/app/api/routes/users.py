@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from ... import crud, models, schemas
-from ..dependencies import get_current_user, require_role, get_db
+from ..dependencies import get_current_user, get_db, require_role
 
 router = APIRouter(
     prefix="/users",
@@ -41,26 +41,26 @@ def update_user(
                 status_code=403,
                 detail="Only root users can change user roles",
             )
-        
+
     # Non-root non-admin users can only update their own profile
-    if current_user.role != models.Role.ROOT and current_user.role != models.Role.ADMIN: 
+    if current_user.role != models.Role.ROOT and current_user.role != models.Role.ADMIN:
         if current_user.id != updating_user.id:
             raise HTTPException(
                 status_code=403,
                 detail="You can only update your own profile",
             )
-        
+
     if user_update.role == models.Role.ROOT and (user_update.id != current_user.id):
         raise HTTPException(
             status_code=403,
             detail="You cannot make any others root! Contact the administrator if you wish to change root user",
         )
 
-
     # Root users can update any user's profile
-    updated_user = crud.user.update_user(db, updating_user=updating_user, user_update=user_update)
+    updated_user = crud.user.update_user(
+        db, updating_user=updating_user, user_update=user_update
+    )
     return updated_user
-
 
 
 @router.delete(

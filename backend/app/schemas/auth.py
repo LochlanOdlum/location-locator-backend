@@ -1,6 +1,5 @@
-from datetime import datetime
-
 from pydantic import BaseModel
+
 from .user import UserRead
 
 
@@ -11,6 +10,7 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     user_id: int | None = None
+
 
 class SignInResponse(Token):
     user: UserRead

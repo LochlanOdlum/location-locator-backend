@@ -18,6 +18,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 240
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/signin")
 
+
 def get_db():
     db = SessionLocal()
     try:

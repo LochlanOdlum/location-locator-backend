@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from .. import models, schemas
 from ..services.openrouteservice import OpenRouteServiceClient
 
+
 def sqlalchemy_object_to_dict(obj):
     """Converts SQLAlchemy model object to a dictionary."""
     return {c.name: getattr(obj, c.name) for c in obj.__table__.columns}
@@ -27,7 +28,7 @@ def create_address(
     address_dict = address_data.model_dump()
 
     # If no coordinates given in input then this will attempt to find them itself
-    if (address_data.latitude is None or address_data.longitude is None):
+    if address_data.latitude is None or address_data.longitude is None:
         (long, lat) = get_coordinates(address_data, ors_client)
         address_dict["latitude"] = lat
         address_dict["longitude"] = long
@@ -56,11 +57,11 @@ def update_address(
         .first()
     )
 
-    if hasattr(address_data, 'model_dump'):
+    if hasattr(address_data, "model_dump"):
         address_data_dict = address_data.model_dump()
     else:
         address_data_dict = sqlalchemy_object_to_dict(address_data)
-        
+
     # Update fields
     db_address.longitude = long
     db_address.latitude = lat

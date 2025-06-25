@@ -8,4 +8,3 @@ class GeocodeSearchInput(BaseModel):
 class GeocodeSearchOutput(BaseModel):
     longitude: float
     latitude: float
-

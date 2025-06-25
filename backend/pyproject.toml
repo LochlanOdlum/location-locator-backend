@@ -1,0 +1,9 @@
+[tool.black]
+line-length = 88         # match Black’s default (you can tweak)
+target-version = ["py38"]  # your lowest-supported Python
+
+[tool.isort]
+profile = "black"       # makes isort’s formatting compatible with Black
+line_length = 88
+multi_line_output = 3   # vertical hanging indent style
+include_trailing_comma = true

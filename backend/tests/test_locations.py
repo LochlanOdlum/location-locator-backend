@@ -1,32 +1,6 @@
-# tests/test_locations.py
-
 import pytest
-from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from unittest.mock import MagicMock
-import sys
-import os
-
-# Add the project root to sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from app.main import app
-from app.api.dependencies import get_current_user, get_ors_client, get_db
-from app.utils.database import Base
-from app.models.user import User
-from app.models.roles import Role
-
-# Create a test database (SQLite in-memory database)
-SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
-
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
-
-# Create a sessionmaker bound to the test engine
-TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-# Fixture to create a test location
 @pytest.fixture
 def test_location(test_client):
     location_data = {

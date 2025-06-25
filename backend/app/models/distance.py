@@ -10,7 +10,9 @@ class Distance(TimestampMixin, Base):
 
     id = Column(Integer, primary_key=True, index=True)
     source_home_id = Column(Integer, ForeignKey("homes.id", ondelete="CASCADE"))
-    destination_location_id = Column(Integer, ForeignKey("locations.id", ondelete="CASCADE"))
+    destination_location_id = Column(
+        Integer, ForeignKey("locations.id", ondelete="CASCADE")
+    )
     walking_distance_minutes = Column(Integer, nullable=False)
 
     source = relationship("Home", back_populates="distances")

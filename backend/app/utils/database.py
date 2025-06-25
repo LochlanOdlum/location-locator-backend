@@ -2,11 +2,10 @@ import os
 import time
 
 from sqlalchemy import create_engine
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
-from sqlalchemy.exc import OperationalError
-
 
 DATABASE_URL = os.getenv("DATABASE_URL") or (
     f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
@@ -23,7 +22,7 @@ for _ in range(10):
             engine = create_engine(
                 DATABASE_URL,
                 connect_args={"check_same_thread": False},
-                poolclass=StaticPool,          
+                poolclass=StaticPool,
             )
         else:
             engine = create_engine(DATABASE_URL)
@@ -35,4 +34,3 @@ for _ in range(10):
     except OperationalError:
         print("Database not ready yet, waiting...")
         time.sleep(1)
-

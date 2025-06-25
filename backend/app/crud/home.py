@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session
 
 from .. import models, schemas
 from ..models.home import Home
@@ -15,7 +15,6 @@ def get_home(db: Session, home_id: int):
     return db.query(models.Home).filter(models.Home.id == home_id).first()
 
 
-
 def create_home(
     db: Session,
     home: schemas.HomeCreate,
@@ -27,7 +26,9 @@ def create_home(
 
     # Create new home itself
     db_home = Home(
-        **home.model_dump(exclude={"address"}), creation_user_id=user_id, address_id=db_address.id
+        **home.model_dump(exclude={"address"}),
+        creation_user_id=user_id,
+        address_id=db_address.id,
     )
     db.add(db_home)
     db.commit()
@@ -39,16 +40,20 @@ def create_home(
     return db_home
 
 
-def update_home(db: Session, home: schemas.HomeCreate, home_id: int, address_id: int, ors_client: OpenRouteServiceClient):
-    db_home = (
-        db.query(models.Home).filter(models.Home.id == home_id).first()
-    )
+def update_home(
+    db: Session,
+    home: schemas.HomeCreate,
+    home_id: int,
+    address_id: int,
+    ors_client: OpenRouteServiceClient,
+):
+    db_home = db.query(models.Home).filter(models.Home.id == home_id).first()
     if db_home:
         for key, value in home.model_dump().items():
             if key not in ["address"]:
                 setattr(db_home, key, value)
 
-        # Invoke update address 
+        # Invoke update address
         update_address(db, home.address, address_id, ors_client)
 
         db.commit()
@@ -65,9 +70,7 @@ def get_distances(db: Session, home_id: int):
 
 
 def delete_home(db: Session, home_id: int):
-    db_home = (
-        db.query(models.Home).filter(models.Home.id == home_id).first()
-    )
+    db_home = db.query(models.Home).filter(models.Home.id == home_id).first()
     if db_home:
         db.delete(db_home)
         db.commit()

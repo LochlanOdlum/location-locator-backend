@@ -1,14 +1,15 @@
-from dotenv import load_dotenv
 import os
 import time
-import psycopg2
+
 import pandas as pd
+import psycopg2
+from dotenv import load_dotenv
 from psycopg2 import OperationalError
 
 load_dotenv()
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-seeds_dir = os.path.join(script_dir, 'table_seeds') 
+seeds_dir = os.path.join(script_dir, "table_seeds")
 
 # Construct the database URL from individual parts
 DATABASE_URL = (
@@ -29,14 +30,15 @@ def clear_tables(conn):
         print(f"Truncated {table}")
     conn.commit()
 
+
 def insert_csv_into_table(csv_path, table_name, conn):
     df = pd.read_csv(csv_path)
 
     cursor = conn.cursor()
 
     # Generate a query to insert data
-    columns = ', '.join(df.columns)
-    placeholders = ', '.join(['%s'] * len(df.columns))
+    columns = ", ".join(df.columns)
+    placeholders = ", ".join(["%s"] * len(df.columns))
     query = f"INSERT INTO {table_name} ({columns}) VALUES ({placeholders})"
 
     # Insert data row by row
@@ -47,14 +49,18 @@ def insert_csv_into_table(csv_path, table_name, conn):
     print(f"Inserted data into {table_name}")
 
     # Update serial sequence (optional, but helps keep `id` in sync)
-    cursor.execute(f"SELECT setval('{table_name}_id_seq', (SELECT MAX(id) FROM {table_name}));")
+    cursor.execute(
+        f"SELECT setval('{table_name}_id_seq', (SELECT MAX(id) FROM {table_name}));"
+    )
     print("Updated incremental counter")
+
 
 def database_is_seeded(conn):
     cursor = conn.cursor()
     cursor.execute("SELECT COUNT(*) FROM users;")
     user_count = cursor.fetchone()[0]
     return user_count > 0
+
 
 def main():
     conn = None
@@ -74,7 +80,7 @@ def main():
     try:
 
         clear_tables(conn)
-        
+
         if database_is_seeded(conn):
             print("Database already seeded. Skipping.")
             return
@@ -87,6 +93,7 @@ def main():
         print(f"Error: {e}")
     finally:
         conn.close()
+
 
 if __name__ == "__main__":
     main()

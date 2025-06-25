@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from ... import crud, models, schemas
 from ...services.openrouteservice import OpenRouteServiceClient
-from ..dependencies import get_current_user, get_ors_client, require_role, get_db
+from ..dependencies import get_current_user, get_db, get_ors_client, require_role
 
 router = APIRouter(
     prefix="/locations",
@@ -55,7 +55,11 @@ def update_location(
     #         status_code=403, detail="Not authorized to update this location"
     #     )
     return crud.locations.update_location(
-        db=db, location=location, location_id=location_id, address_id = db_location.address.id, ors_client = ors_client,
+        db=db,
+        location=location,
+        location_id=location_id,
+        address_id=db_location.address.id,
+        ors_client=ors_client,
     )
 
 

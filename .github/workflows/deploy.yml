@@ -14,6 +14,42 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Cache pip
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('backend/requirements-dev.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        working-directory: backend
+        run: |
+          pip install --upgrade pip
+          # install both prod & dev deps (linters, pytest, etc.)
+          pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Check import order (isort)
+        working-directory: backend
+        run: isort . --check --diff
+
+      - name: Check formatting (black)
+        working-directory: backend
+        run: black . --check
+
+      - name: Run linter (flake8)
+        working-directory: backend
+        run: flake8 .
+
+      - name: Run tests (pytest)
+        working-directory: backend
+        run: pytest --maxfail=1 --disable-warnings -q
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:

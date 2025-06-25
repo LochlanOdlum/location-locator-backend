@@ -27,7 +27,9 @@ def get_user(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
 
 
-def update_user(db: Session, updating_user: models.User, user_update=schemas.UserUpdate):
+def update_user(
+    db: Session, updating_user: models.User, user_update=schemas.UserUpdate
+):
     for key, value in user_update.model_dump().items():
         setattr(updating_user, key, value)
 

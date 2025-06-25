@@ -25,7 +25,9 @@ def create_location(
 
     # Create location itself
     db_location = models.Location(
-        **location.model_dump(exclude={"address"}), creation_user_id=user_id, address_id=db_address.id
+        **location.model_dump(exclude={"address"}),
+        creation_user_id=user_id,
+        address_id=db_address.id,
     )
     db.add(db_location)
     db.commit()
@@ -36,7 +38,13 @@ def create_location(
     return db_location
 
 
-def update_location(db: Session, location: schemas.LocationCreate, location_id: int, address_id: int, ors_client: OpenRouteServiceClient):
+def update_location(
+    db: Session,
+    location: schemas.LocationCreate,
+    location_id: int,
+    address_id: int,
+    ors_client: OpenRouteServiceClient,
+):
     db_location = (
         db.query(models.Location).filter(models.Location.id == location_id).first()
     )

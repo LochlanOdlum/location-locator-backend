@@ -9,7 +9,7 @@ from .user import UserRead
 class LocationBase(BaseModel):
     name: str
     summary: str
-    description: str 
+    description: str
     price_estimate_min: int
     price_estimate_max: int
 
@@ -24,7 +24,6 @@ class LocationRead(LocationBase):
     creator: UserRead
     created_at: datetime
     updated_at: datetime
-
 
     class Config:
         orm_mode = True

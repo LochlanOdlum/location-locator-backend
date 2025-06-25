@@ -1,7 +1,7 @@
 # Needed for dev scripts
 pandas
-black
-isort
 pytest
 httpx
-psycopg2-binary
+black 
+isort 
+flake8
