@@ -1,73 +1,44 @@
-# FastAPI App
+# Lochlan’s Location Locator API
 
-A simple FastAPI application with PostgreSQL and OpenRouteService integration.
+A simple REST API for locating places by name.
 
 ## Prerequisites
 
-- **Python 3.9+**
-- **PostgreSQL**
-- **Virtual Environment Tool** (`venv` or `virtualenv`)
-- **OpenRouteService API Key**
+- [Docker](https://www.docker.com/get-started) (v20.10+)
+- [Docker Compose](https://docs.docker.com/compose/install/) (v2.0+)
 
-## Setup Instructions
+## Getting Started
 
-1. **Clone the Repository**
-
-2. **Create and Activate a Virtual Environment**
+1. **Clone the repository**
 
    ```bash
-   python3 -m venv venv
+   git clone https://github.com/your-username/location-locator.git
+   cd location-locator
    ```
 
-   - **On macOS/Linux:**
+2. **Build and run with Docker Compose**
 
-     ```bash
-     source venv/bin/activate
-     ```
+From the project root (where docker-compose.yml lives), simply run:
 
-   - **On Windows:**
+```
+ docker compose up --build
+```
 
-     ```bash
-     venv\Scripts\activate
-     ```
+This will:
 
-3. **Install Dependencies**
+- Build the API image
+- Start the server on port 80
 
-   ```bash
-   pip install -r requirements.txt
-   pip install -r requirements-dev.txt
-   ```
+## Testing
 
-4. **Start PostgreSQL Database**
+Once the containers are up:
 
-5. **Configure Environment Variables**
+```
+curl http://localhost:80
+```
 
-   Create a `.env` file in the project root and add the following:
+You should see:
 
-   ```env
-   DATABASE_USERNAME=your_db_username
-   DATABASE_PASSWORD=your_db_password
-   DATABASE_ENDPOINT=localhost
-   DATABASE_PORT=5432
-   DATABASE_NAME=your_database_name
-
-   AUTH_HASH_SECRET_KEY=your_secret_key
-
-   OPENROUTESERVICE_API_KEY=your_openrouteservice_api_key
-   ```
-
-   - **Get OpenRouteService API Key:**  
-     Sign up at [OpenRouteService](https://openrouteservice.org/sign-up/) and obtain your API key.
-
-6. **Run the Application**
-
-   ```bash
-   uvicorn app.main:app --reload
-   ```
-
-   The app will be accessible at [http://127.0.0.1:8000](http://127.0.0.1:8000).
-
-## Notes
-
-- The `--reload` flag is useful for development as it reloads the server on code changes.
-- Make sure PostgreSQL credentials and other environment variables are correctly set in the `.env` file.
+```
+{"message":"Welcome to Lochlan's Location Locator API"}
+```
