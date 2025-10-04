@@ -1,6 +1,10 @@
+Frontend can be found here: https://github.com/LochlanOdlum/location-locator-frontend
+
+
 # Lochlan’s Location Locator API
 
 A simple REST API for locating places by name.
+
 
 ## Prerequisites
 
